@@ -16,6 +16,12 @@ def addPh2L1Objects(process):
     process.l1tPh2NanoTask.add(p2L1TablesTask)
     return process
 
+### Main Ph2L1 Mu objects
+from PhysicsTools.L1Nano.l1tPh2MuNanotables_cff import * 
+def addPh2L1MuObjects(process):
+    process.l1tPh2NanoTask.add(p2L1MuTablesTask)
+    return process
+
 #### GENERATOR INFO
 ## based on https://github.com/cms-sw/cmssw/blob/master/PhysicsTools/NanoAOD/python/nanogen_cff.py#L2-L36
 from PhysicsTools.NanoAOD.genparticles_cff import * ## for GenParts
@@ -67,6 +73,18 @@ def addFullPh2L1Nano(process):
     addGenObjects(process)
     addPh2L1Objects(process)
     addPh2GTObjects(process)
+    return process
 
+def addPh2L1MuNano(process):
+    addGenObjects(process)
+    addPh2L1MuObjects(process)
+    process.l1tPh2NanoTask.remove(metMCTable)
+    process.l1tPh2NanoTask.remove(process.prunedGenParticleTable)
+    process.l1tPh2NanoTask.remove(genJetTable)
+    process.l1tPh2NanoTask.remove(patJetPartonsNano)
+    process.l1tPh2NanoTask.remove(genJetAK8FlavourAssociation)
+    process.l1tPh2NanoTask.remove(genJetFlavourTable)
+    process.l1tPh2NanoTask.remove(genJetAK8Table)
+    process.l1tPh2NanoTask.remove(genJetAK8FlavourTable)
     return process
 
