@@ -37,20 +37,23 @@ EMTFTrackTable = cms.EDProducer( "SimpleEMTFTrackCandidateFlatTableProducer",
                                 src = cms.InputTag('simEmtfDigisPhase2'),
                                 name = cms.string("emtf"),
                                 doc = cms.string("EMTF Track"),
-                                cut = cms.string("bx()==0"),
+                                cut = cms.string("valid()"),
                                 singleton = cms.bool(False), # the number of entries is variable
                                 variables = cms.PSet(
-                                  # bx = Var("bx()", "int16"), 
+                                  bx = Var("bx()", "int16"), 
+                                  unconst = Var("unconstrained()", "int16"),
                                   endcap = Var("endcap()", "int16"), 
                                   sector = Var("sector()", "int16"), 
                                   Q = Var("emtfQ()", "int16"),
+                                  pt = Var("emtfPt()", int), 
                                   qual = Var("modelQual()", "int16"), 
                                   phi = Var("modelPhi()",int), 
                                   eta = Var("modelEta()", int), 
-                                  pt = Var("emtfPt()", int), 
                                   d0 =  Var("emtfD0()", int), 
                                   z0 =  Var("emtfZ0()", int), 
+                                  pattern = Var("modelPattern()", "int16"), 
                                   beta =  Var("emtfBeta()", int), 
+                                  # siteHits =  Var("siteHits()", int), 
                                 )
                                )
 
@@ -75,6 +78,38 @@ OMTFTrackTable = cms.EDProducer( "SimpleOMTFTrackCandidateFlatTableProducer",
                                   processor = Var("processor()", "int16", doc="(0..5 for OMTF/EMTF; 0..11 for BMTF)"),
                                 )
                                )
+
+MuonStubTable = cms.EDProducer( "SimpleMuonStubFlatTableProducer",
+                                src = cms.InputTag('l1tStubsGmt', 'tps'),
+                                name = cms.string("stub"),
+                                doc = cms.string("Muon Stubs"),
+                                singleton = cms.bool(False), # the number of entries is variable
+                                variables = cms.PSet(
+                                  etaregion = Var("etaRegion()", "int16", doc="return wheel"),
+                                  phiregion = Var("phiRegion()", "int16", doc="return sector"),
+                                  depthregion = Var("depthRegion()", "int16", doc="return station"),
+                                  tfLayer = Var("tfLayer()", "uint16", doc="return track finder layer"),
+                                  isBarrel = Var("isBarrel()", bool),
+                                  isEndcap = Var("isEndcap()", bool), 
+                                  phi1 = Var("coord1()", int),
+                                  phi2 = Var("coord2()", int),
+                                  eta1 = Var("eta1()", int),
+                                  eta2 = Var("eta2()", int),
+                                  offphi1 = Var("offline_coord1()", float),
+                                  offphi2 = Var("offline_coord2()", float),
+                                  offeta1 = Var("offline_eta1()", float),
+                                  offeta2 = Var("offline_eta2()", float),
+                                  bx = Var("bxNum()", int),
+                                  type = Var("type()", int),
+                                  qual = Var("quality()", int),
+                                  etaqual = Var("etaQuality()", int),
+                                  id = Var("id()", int),
+                                  index = Var("index()", int),
+                                  addr = Var("address()", int),
+                                  kmtf_addr= Var("kmtf_address()", int)
+                                )
+                               )
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GMT ~~~~~
 ### common variables set (pt/eta/phi)
 l1MuObjVars = cms.PSet(
@@ -102,25 +137,35 @@ l1MuObjVars = cms.PSet(
 )
 
 SAPromptMuTable = cms.EDProducer( "SimpleCandidateFlatTableProducer",
-    src = cms.InputTag('l1tSAMuonsGmt','promptSAMuons'),
+    src = cms.InputTag('l1tSAMuonsGmt','prompt'),
     name = cms.string("samu"),
     doc = cms.string("GMT standalone Muons, origin: GMT"),
     cut = cms.string(""),
     singleton = cms.bool(False), # the number of entries is variable
     variables = cms.PSet(
-      l1MuObjVars
+      l1MuObjVars,
         # ## more info
-        # nStubs = Var("stubs().size()",int,doc="number of stubs"),
+      # nStubs = Var("stubs().size()","uint16",doc="number of stubs")
     )
 )
 
-
 SADisplacedMuTable = SAPromptMuTable.clone(
-    src = cms.InputTag("l1tSAMuonsGmt", "displacedSAMuons"),
+    src = cms.InputTag("l1tSAMuonsGmt", "displaced"),
     name = cms.string("dismu"),
     doc = cms.string("GMT standalone displaced Muons, origin: GMT"),
 )
 
+FwdPromptMuTable = SAPromptMuTable.clone(
+    src = cms.InputTag("l1tFwdMuonsGmt", "prompt"),
+    name = cms.string("fwdmu"),
+    doc = cms.string("GMT standalone displaced Muons, origin: GMT"),
+)
+
+FwdDisplacedMuTable = SAPromptMuTable.clone(
+    src = cms.InputTag("l1tFwdMuonsGmt", "displaced"),
+    name = cms.string("fwddismu"),
+    doc = cms.string("GMT standalone displaced Muons, origin: GMT"),
+)
 
 TkMuTable = SAPromptMuTable.clone(
     src = cms.InputTag('l1tTkMuonsGmt'),
@@ -139,9 +184,12 @@ p2L1MuTablesTask = cms.Task(
   EMTFTrackTable,
   OMTFTrackTable,
   ## Muons
+  MuonStubTable,
   TkMuTable,
   SAPromptMuTable, 
   SADisplacedMuTable, 
+  FwdPromptMuTable,
+  FwdDisplacedMuTable,
   # # GTT
   vtxTable,
   pvtxTable

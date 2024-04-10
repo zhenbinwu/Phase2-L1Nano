@@ -33,8 +33,9 @@ def addGenObjects(process):
 
     ## add more GenVariables
     # from L1Ntuple Gen: https://github.com/artlbv/cmssw/blob/94a5ec13b8ce76afb8ea4f157bb92fb547fadee2/L1Trigger/L1TNtuples/plugins/L1GenTreeProducer.cc#L203
-    genParticleTable.variables.vertX = Var("vertex.x", float, "vertex X")
-    genParticleTable.variables.vertY = Var("vertex.y", float, "vertex Y")
+    genParticleTable.variables.vx = Var("vertex.x", float, "vertex X")
+    genParticleTable.variables.vy = Var("vertex.y", float, "vertex Y")
+    genParticleTable.variables.vz = Var("vertex.z", float, "vertex Z")
     genParticleTable.variables.lXY = Var("sqrt(vertex().x() * vertex().x() + vertex().y() * vertex().y())", float, "lXY")
     genParticleTable.variables.dXY = Var("-vertex().x() * sin(phi()) + vertex().y() * cos(phi())", float, "dXY")
 
