@@ -15,7 +15,7 @@ git cms-checkout-topic -u cms-l1t-offline:phase2-l1t-1400pre3_v5
 scram b -j 8
 
 ### ADDING NANO
-git clone git@github.com:cms-l1-dpg/Phase2-L1Nano.git PhysicsTools/L1Nano
+git clone -b Mu_1400pre3v5 git@github.com:zhenbinwu/Phase2-L1Nano.git PhysicsTools/L1Nano
 scram b -j 8
 ```
 
