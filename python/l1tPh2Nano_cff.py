@@ -16,6 +16,11 @@ def addPh2L1Objects(process):
     process.l1tPh2NanoTask.add(p2L1TablesTask)
     return process
 
+from PhysicsTools.L1Nano.l1tPh2MuNanotables_cff import *
+def addPh2L1MuonObjects(process):
+    process.l1tPh2NanoTask.add(p2L1MuTablesTask)
+    return process
+
 #### GENERATOR INFO
 ## based on https://github.com/cms-sw/cmssw/blob/master/PhysicsTools/NanoAOD/python/nanogen_cff.py#L2-L36
 from PhysicsTools.NanoAOD.genparticles_cff import * ## for GenParts
