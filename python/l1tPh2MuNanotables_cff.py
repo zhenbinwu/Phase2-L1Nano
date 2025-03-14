@@ -21,10 +21,9 @@ EMTFHitTable = cms.EDProducer( "SimpleEMTFHitCandidateFlatTableProducer",
                                 layer = Var("layer()", "int16"), 
                                 subsystem = Var("subsystem()", "int16"), 
                                 cscId = Var("cscId()", "int16"), 
-                                endcap = Var("endcap()", "int16"), 
-                                fneigh = Var("flagNeighbor()", "bool")
-                                fvalid = Var("flagValid()", "bool")
-                                fsub = Var("flagSubstitute()", "bool")
+                                fneigh = Var("flagNeighbor()", "bool"),
+                                fvalid = Var("flagValid()", "bool"),
+                                fsub = Var("flagSubstitute()", "bool"),
 
                                 chamber = Var("emtfChamber()", "int16"),
                                 segment = Var("emtfSegment()", "int16"),
@@ -213,6 +212,6 @@ p2L1MuTablesTask = cms.Task(
     OMTFTrackTable,
     ## Muons
     MuonStubTable,
-    # Tau23MusTable
+    Tau23MusTable
 )
 
