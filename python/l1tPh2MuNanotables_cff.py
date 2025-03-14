@@ -198,6 +198,6 @@ p2L1MuTablesTask = cms.Task(
     OMTFTrackTable,
     ## Muons
     MuonStubTable,
-    Tau23MusTable
+    # Tau23MusTable
 )
 

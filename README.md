@@ -1,37 +1,29 @@
 # Phase2-L1Nano
-NanoAOD ntupler for Phase-2 L1 Objects
+NanoAOD ntupler for Phase-2 L1 Muon Objects
 
 ## Setup
 
-This is for version `V43` that is based on CMSSW_14_1_0_pre7.
-For more information on the latest L1T Phase 2 software developments in CMSSW see: https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TPhase2Instructions#Development
-
-Corresponding menu twiki section: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PhaseIIL1TriggerMenuTools#Phase_2_L1_Trigger_objects_based
+The Phase2 L1Nano is merged into CMSSW. This code extend the Phase2 L1Nano to
+include more muon information for study.
 
 ```bash
-cmsrel CMSSW_14_1_0_pre7
-cd CMSSW_14_1_0_pre7/src/
+cmsrel CMSSW_15_1_0_pre1
+cd CMSSW_15_1_0_pre1/src/
 cmsenv
+git cms-init
 
 ### ADDING NANO
-git clone git@github.com:cms-l1-dpg/Phase2-L1Nano.git PhysicsTools/L1Nano
+git clone git@github.com:zhenbinwu/Phase2-L1Nano.git PhysicsTools/L1Nano
 scram b -j 8
 ```
 
-## Usage
-
-### Direct config
-
-In the `test` directory there is a `cmsRun` config to rerun the L1 + **(L1 Track trigger)** + the P2GT emulator and produce the nano ntuple from these outputs.
-
-Usage: `cmsRun test/V43_rerunL1wTT_cfg.py`
+## Usage (To be updated)
 
 ### Via cmsDriver
 
 One can append the L1Nano output to the `cmsDriver` command via this customisation: 
 ```bash
---eventcontent NANOAOD
--s USER:PhysicsTools/L1Nano/l1tPh2Nano_cff.l1tPh2NanoTask --customise PhysicsTools/L1Nano/l1tPh2Nano_cff.addFullPh2L1Nano
+--eventcontent NANOAOD -s USER:PhysicsTools/L1Nano/l1tPh2Nano_cff.l1tPh2NanoTask --customise PhysicsTools/L1Nano/l1tPh2MuNano_cff.addFullPh2L1Nano
 ```
 
 `cmsDriver` command (NO Track Trigger, based on [the 1400pre3 recipe from the Offline SW twiki](https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TPhase2Instructions#Recipe_for_phase2_l1t_1400pre3_v9):
@@ -76,12 +68,4 @@ This can be easily handled with [`uproot/awkward`](https://gitlab.cern.ch/cms-po
 ```python
 f = uproot.open("l1nano.root")
 events = f["Events"].arrays() 
-```
-
-### P2GT emulator decisions
-The GT emulator decisions are stored like this for now:
-```
-'nL1GT', -> number of algorithms, the names are not stored, but are alphabetically sorted
-'L1GT_final', -> final decision
-'L1GT_initial', -> initial decision (no difference at the moment)
 ```
